@@ -1,0 +1,227 @@
+@import "tailwindcss";
+
+/* ── Custom Theme ── */
+@theme {
+  --color-btc-orange: #F7931A;
+  --color-btc-gold: #FFD700;
+  --color-btc-amber: #FF9500;
+  --color-btc-dark: #060608;
+  --color-btc-card: #0E0E12;
+  --color-btc-border: #1E1E28;
+  --color-btc-surface: #12121A;
+  --color-btc-muted: #6B6B80;
+  --color-btc-success: #00E676;
+  --color-btc-danger: #FF4444;
+  --color-sol-purple: #9945FF;
+  --color-sol-green: #14F195;
+  --font-sans: 'Space Grotesk', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+/* ── Base ── */
+body {
+  background: var(--color-btc-dark);
+  color: #E5E5E5;
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+
+/* ── Glassmorphism ── */
+.glass {
+  background: rgba(14, 14, 18, 0.6);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(247, 147, 26, 0.1);
+}
+
+.glass-strong {
+  background: rgba(14, 14, 18, 0.8);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  border: 1px solid rgba(247, 147, 26, 0.15);
+}
+
+/* ── Glow Effects ── */
+.glow-orange {
+  box-shadow: 0 0 20px rgba(247, 147, 26, 0.3), 0 0 60px rgba(247, 147, 26, 0.1);
+}
+.glow-orange-intense {
+  box-shadow: 0 0 30px rgba(247, 147, 26, 0.5), 0 0 80px rgba(247, 147, 26, 0.2), 0 0 120px rgba(247, 147, 26, 0.1);
+}
+.glow-success {
+  box-shadow: 0 0 20px rgba(0, 230, 118, 0.4), 0 0 60px rgba(0, 230, 118, 0.15);
+}
+
+/* ── Animated Gradient Border — FIXED: pointer-events none ── */
+.gradient-border {
+  position: relative;
+}
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, #F7931A, #FFD700, #F7931A, #FF9500);
+  background-size: 300% 300%;
+  animation: gradient-rotate 4s ease infinite;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+@keyframes gradient-rotate {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ── Pulse Animation ── */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(247, 147, 26, 0.4), 0 0 60px rgba(247, 147, 26, 0.15); }
+  50% { box-shadow: 0 0 40px rgba(247, 147, 26, 0.7), 0 0 100px rgba(247, 147, 26, 0.35), 0 0 140px rgba(247, 147, 26, 0.15); }
+}
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* ── Marquee ── */
+@keyframes scroll-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-scroll {
+  animation: scroll-left 25s linear infinite;
+}
+
+/* ── Fade In Up ── */
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(30px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ── Float ── */
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33% { transform: translateY(-15px) rotate(2deg); }
+  66% { transform: translateY(8px) rotate(-1deg); }
+}
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+.animate-float-delayed {
+  animation: float 7s ease-in-out 1s infinite;
+}
+.animate-float-slow {
+  animation: float 9s ease-in-out 2s infinite;
+}
+
+/* ── Spin Slow ── */
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
+}
+
+/* ── Orbit ── */
+@keyframes orbit {
+  from { transform: rotate(0deg) translateX(120px) rotate(0deg); }
+  to { transform: rotate(360deg) translateX(120px) rotate(-360deg); }
+}
+.animate-orbit {
+  animation: orbit 12s linear infinite;
+}
+
+/* ── Shimmer ── */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(247,147,26,0.08), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+/* ── Rising Particles ── */
+@keyframes rise {
+  0% { transform: translateY(100vh) scale(0); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+}
+
+/* ── Background Radial Glow ── */
+.bg-radial-glow {
+  background:
+    radial-gradient(ellipse 600px 400px at 50% 0%, rgba(247, 147, 26, 0.08), transparent),
+    radial-gradient(ellipse 400px 300px at 80% 50%, rgba(153, 69, 255, 0.04), transparent),
+    radial-gradient(ellipse 400px 300px at 20% 80%, rgba(20, 241, 149, 0.03), transparent);
+}
+
+/* ── Grid Background ── */
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(247, 147, 26, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(247, 147, 26, 0.02) 1px, transparent 1px);
+  background-size: 80px 80px;
+}
+
+/* ── Input Styling ── */
+input[type="text"], input[type="number"] {
+  background: rgba(6, 6, 8, 0.8);
+  border: 1px solid rgba(247, 147, 26, 0.15);
+  transition: all 0.3s ease;
+  color: white;
+}
+input[type="text"]:focus, input[type="number"]:focus {
+  border-color: #F7931A;
+  box-shadow: 0 0 0 3px rgba(247, 147, 26, 0.1), 0 0 20px rgba(247, 147, 26, 0.1);
+  outline: none;
+}
+input::placeholder {
+  color: rgba(107, 107, 128, 0.5);
+}
+input:disabled {
+  opacity: 0.5;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #F7931A; border-radius: 2px; }
+
+/* ── Orange Pill Shape ── */
+.orange-pill {
+  background: linear-gradient(135deg, #F7931A, #FFD700);
+  border-radius: 9999px;
+}
+
+/* ── Counter ── */
+@keyframes count-up {
+  from { opacity: 0; transform: scale(0.5); }
+  to { opacity: 1; transform: scale(1); }
+}
+.animate-count { animation: count-up 0.5s ease-out forwards; }
+
+/* ── Hero Text Gradient ── */
+.text-gradient-orange {
+  background: linear-gradient(135deg, #F7931A 0%, #FFD700 50%, #FF9500 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-multi {
+  background: linear-gradient(135deg, #F7931A 0%, #FFD700 30%, #14F195 70%, #9945FF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}

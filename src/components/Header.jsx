@@ -1,22 +1,23 @@
-import { useState } from 'react'
-import { Wallet, Wifi, WifiOff, ChevronDown } from 'lucide-react'
+import { useWalletConnect } from '@btc-vision/walletconnect'
+import { Wallet, Wifi, WifiOff, ChevronDown, LogOut } from 'lucide-react'
 
 export default function Header() {
-  const [connected, setConnected] = useState(false)
-  const [address, setAddress] = useState('')
+  const {
+    openConnectModal,
+    disconnect,
+    walletAddress,
+    connecting,
+    network,
+  } = useWalletConnect()
 
-  const connectWallet = async () => {
-    setConnected(true)
-    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz123456789'
-    let addr = ''
-    for (let i = 0; i < 8; i++) addr += chars[Math.floor(Math.random() * chars.length)]
-    setAddress(addr + '...' + addr.slice(0, 4))
-  }
+  const isConnected = !!walletAddress
 
-  const disconnect = () => {
-    setConnected(false)
-    setAddress('')
-  }
+  // Shorten address for display: bc1qab...xyz4
+  const shortAddress = walletAddress
+    ? walletAddress.slice(0, 8) + '...' + walletAddress.slice(-4)
+    : ''
+
+  const networkName = network?.network || 'Bitcoin Regtest'
 
   return (
     <header className="glass-strong sticky top-0 z-50">
@@ -54,32 +55,35 @@ export default function Header() {
 
         {/* Network + Wallet */}
         <div className="flex items-center gap-3">
+          {/* Network indicator */}
           <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-btc-surface border border-btc-border text-xs">
-            {connected ? (
+            {isConnected ? (
               <Wifi className="w-3 h-3 text-btc-success" />
             ) : (
               <WifiOff className="w-3 h-3 text-btc-muted" />
             )}
-            <span className="text-btc-muted">Bitcoin Regtest</span>
-            <span className={`w-1.5 h-1.5 rounded-full ${connected ? 'bg-btc-success animate-pulse' : 'bg-btc-danger'}`} />
+            <span className="text-btc-muted">{networkName}</span>
+            <span className={`w-1.5 h-1.5 rounded-full ${isConnected ? 'bg-btc-success animate-pulse' : 'bg-btc-danger'}`} />
           </div>
 
-          {connected ? (
+          {/* Wallet button */}
+          {isConnected ? (
             <button
               onClick={disconnect}
               className="flex items-center gap-2 px-4 py-2 rounded-xl bg-btc-surface border border-btc-orange/20 text-sm text-btc-orange hover:bg-btc-orange/10 hover:border-btc-orange/40 transition-all cursor-pointer group"
             >
               <div className="w-2 h-2 rounded-full bg-btc-success" />
-              <span className="font-mono text-xs">{address}</span>
-              <ChevronDown className="w-3 h-3 opacity-50 group-hover:opacity-100 transition" />
+              <span className="font-mono text-xs">{shortAddress}</span>
+              <LogOut className="w-3 h-3 opacity-50 group-hover:opacity-100 transition" />
             </button>
           ) : (
             <button
-              onClick={connectWallet}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-btc-orange to-btc-amber text-btc-dark font-semibold text-sm hover:brightness-110 hover:scale-105 transition-all glow-orange cursor-pointer active:scale-95"
+              onClick={openConnectModal}
+              disabled={connecting}
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-btc-orange to-btc-amber text-btc-dark font-semibold text-sm hover:brightness-110 hover:scale-105 transition-all glow-orange cursor-pointer active:scale-95 disabled:opacity-50"
             >
               <Wallet className="w-4 h-4" />
-              Connect OP_WALLET
+              {connecting ? 'Connecting...' : 'Connect OP_WALLET'}
             </button>
           )}
         </div>
